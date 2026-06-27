@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Baobao Meter</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #ffffff;
+    color: #232323;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .bm {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .bm-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #1B2A41;
+    margin-bottom: 4px;
+  }
+
+  .bm-sub {
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 2.5rem;
+  }
+
+  .bm-axis {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1B2A41;
+    margin-bottom: 1.5rem;
+  }
+
+  .bm-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .bm-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #1B2A41;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s;
+  }
+
+  .bm-icon:hover { background: #2a3f5a; }
+
+  .bm-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .bm-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    pointer-events: none;
+  }
+
+  .bm-placeholder i {
+    font-size: 22px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .bm-placeholder span {
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .bm-icon input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bm-track-wrap {
+    flex: 1;
+    position: relative;
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .bm-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #E5E7EB;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .bm-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 4px;
+    background: #D9A521;
+    pointer-events: none;
+    transition: width 0.05s;
+  }
+
+  .bm-dot {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #D9A521;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    z-index: 2;
+    user-select: none;
+    transition: box-shadow 0.1s;
+  }
+
+  .bm-dot:active { cursor: grabbing; box-shadow: 0 2px 14px rgba(217,165,33,0.45); }
+  .bm-dot:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(217,165,33,0.45); }
+
+  .bm-pct {
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 32px;
+    font-weight: 600;
+    color: #D9A521;
+    letter-spacing: -0.02em;
+  }
+
+  .bm-config {
+    margin-top: 2.5rem;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 2rem;
+  }
+
+  .bm-config-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .bm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .bm-field label {
+    font-size: 12px;
+    color: #6B7280;
+  }
+
+  .bm-field input[type=text] {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #D1D5DB;
+    background: #F9FAFB;
+    color: #232323;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .bm-field input[type=text]:focus { border-color: #D9A521; }
+</style>
+</head>
+<body>
+
+<div class="bm">
+  <p class="bm-title">The Baobao Meter</p>
+  <p class="bm-sub">Drag the slider to score this plan.</p>
+
+  <div class="bm-axis" id="axisLabel">Chill vs Adventure</div>
+
+  <div class="bm-row">
+    <div class="bm-icon" title="Upload left icon">
+      <div class="bm-placeholder" id="leftPlaceholder">
+        <i class="ti ti-upload" aria-hidden="true"></i>
+        <span>Upload</span>
+      </div>
+      <img id="leftImg" style="display:none" alt="left icon" />
+      <input type="file" accept="image/*" id="leftFile" aria-label="Upload left icon" />
+    </div>
+
+    <div class="bm-track-wrap">
+      <div class="bm-track" id="track">
+        <div class="bm-fill" id="fill" style="width:50%"></div>
+        <div class="bm-dot" id="dot" style="left:50%"
+          tabindex="0" role="slider"
+          aria-label="Score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        </div>
+      </div>
+    </div>
+
+    <div class="bm-icon" title="Upload right icon">
+      <div class="bm-placeholder" id="rightPlaceholder">
+        <i class="ti ti-upload" aria-hidden="true"></i>
+        <span>Upload</span>
+      </div>
+      <img id="rightImg" style="display:none" alt="right icon" />
+      <input type="file" accept="image/*" id="rightFile" aria-label="Upload right icon" />
+    </div>
+  </div>
+
+  <div class="bm-pct" id="pctDisplay">50%</div>
+
+  <div class="bm-config">
+    <div class="bm-config-title">Customize</div>
+    <div class="bm-field">
+      <label>Axis label</label>
+      <input type="text" id="cfgAxis" value="Chill vs Adventure" />
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleUpload(fileInputId, imgId, placeholderId) {
+    document.getElementById(fileInputId).addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const img = document.getElementById(imgId);
+      img.src = url;
+      img.style.display = 'block';
+      document.getElementById(placeholderId).style.display = 'none';
+    });
+  }
+
+  handleUpload('leftFile',  'leftImg',  'leftPlaceholder');
+  handleUpload('rightFile', 'rightImg', 'rightPlaceholder');
+
+  document.getElementById('cfgAxis').addEventListener('input', function() {
+    document.getElementById('axisLabel').textContent = this.value;
+  });
+
+  const dot = document.getElementById('dot');
+  const fill = document.getElementById('fill');
+  const track = document.getElementById('track');
+  const pctDisplay = document.getElementById('pctDisplay');
+  let dragging = false;
+
+  function getPct(clientX) {
+    const r = track.getBoundingClientRect();
+    return Math.min(100, Math.max(0, Math.round((clientX - r.left) / r.width * 100)));
+  }
+
+  function setPos(p) {
+    dot.style.left = p + '%';
+    fill.style.width = p + '%';
+    dot.setAttribute('aria-valuenow', p);
+    pctDisplay.textContent = p + '%';
+  }
+
+  dot.addEventListener('mousedown', function(e) { dragging = true; e.preventDefault(); });
+  dot.addEventListener('touchstart', function(e) { dragging = true; e.preventDefault(); }, { passive: false });
+
+  track.addEventListener('mousedown', function(e) {
+    if (e.target === dot) return;
+    setPos(getPct(e.clientX));
+    dragging = true;
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) { if (dragging) setPos(getPct(e.clientX)); });
+  window.addEventListener('touchmove', function(e) { if (dragging) setPos(getPct(e.touches[0].clientX)); }, { passive: false });
+  window.addEventListener('mouseup', function() { dragging = false; });
+  window.addEventListener('touchend', function() { dragging = false; });
+
+  dot.addEventListener('keydown', function(e) {
+    const cur = parseInt(dot.style.left);
+    if (e.key === 'ArrowRight') { e.preventDefault(); setPos(Math.min(100, cur + 1)); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); setPos(Math.max(0,   cur - 1)); }
+  });
+</script>
+
+</body>
+</html>
