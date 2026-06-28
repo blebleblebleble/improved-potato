@@ -37,13 +37,6 @@
     margin-bottom: 2.5rem;
   }
 
-  .bm-axis {
-    font-size: 17px;
-    font-weight: 600;
-    color: #1B2A41;
-    margin-bottom: 1.5rem;
-  }
-
   .bm-row {
     display: flex;
     align-items: center;
@@ -158,46 +151,6 @@
     color: #D9A521;
     letter-spacing: -0.02em;
   }
-
-  .bm-config {
-    margin-top: 2.5rem;
-    border-top: 1px solid #E5E7EB;
-    padding-top: 2rem;
-  }
-
-  .bm-config-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: #9CA3AF;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
-  }
-
-  .bm-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-bottom: 12px;
-  }
-
-  .bm-field label {
-    font-size: 12px;
-    color: #6B7280;
-  }
-
-  .bm-field input[type=text] {
-    font-size: 14px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #D1D5DB;
-    background: #F9FAFB;
-    color: #232323;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .bm-field input[type=text]:focus { border-color: #D9A521; }
 </style>
 </head>
 <body>
@@ -205,8 +158,6 @@
 <div class="bm">
   <p class="bm-title">The Baobao Meter</p>
   <p class="bm-sub">Drag the slider to score this plan.</p>
-
-  <div class="bm-axis" id="axisLabel">Chill vs Adventure</div>
 
   <div class="bm-row">
     <div class="bm-icon" title="Upload left icon">
@@ -239,14 +190,6 @@
   </div>
 
   <div class="bm-pct" id="pctDisplay">50%</div>
-
-  <div class="bm-config">
-    <div class="bm-config-title">Customize</div>
-    <div class="bm-field">
-      <label>Axis label</label>
-      <input type="text" id="cfgAxis" value="Chill vs Adventure" />
-    </div>
-  </div>
 </div>
 
 <script>
@@ -264,10 +207,6 @@
 
   handleUpload('leftFile',  'leftImg',  'leftPlaceholder');
   handleUpload('rightFile', 'rightImg', 'rightPlaceholder');
-
-  document.getElementById('cfgAxis').addEventListener('input', function() {
-    document.getElementById('axisLabel').textContent = this.value;
-  });
 
   const dot = document.getElementById('dot');
   const fill = document.getElementById('fill');
