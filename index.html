@@ -176,8 +176,8 @@
     // Get the current page HTML and swap in the baked images
     const html = document.documentElement.outerHTML;
     const baked = html
-      .replace(/<img id="leftImg"[^>]*>/, `<img id="leftImg" src="${leftSrc}" style="display:block" alt="left icon" />`)
-      .replace(/<img id="rightImg"[^>]*>/, `<img id="rightImg" src="${rightSrc}" style="display:block" alt="right icon" />`);
+      .replace(/<img id="leftImg"[^>]*\/?>/, `<img id="leftImg" src="${leftSrc}" style="display:block" alt="left icon" />`)
+      .replace(/<img id="rightImg"[^>]*\/?>/, `<img id="rightImg" src="${rightSrc}" style="display:block" alt="right icon" />`);
 
     const blob = new Blob([baked], { type: 'text/html' });
     const a = document.createElement('a');
